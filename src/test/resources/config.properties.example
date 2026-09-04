@@ -1,0 +1,18 @@
+# Application Configuration
+url=https://mail.proton.me
+browser=chrome
+headless=false
+
+implicitWait=0
+explicitWait=20
+
+# Test Credentials (Primary Account)
+username=wayne7Bruce7@proton.me
+password=YOUR_PASSWORD_HERE
+
+# Secondary Account Credentials (For two-account verification flows)
+receiverUsername=rkatiyar07@proton.me
+receiverPassword=YOUR_PASSWORD_HERE
+
+cc=batmanbruce77@proton.me
+bcc=bwaynebatman7@proton.me
