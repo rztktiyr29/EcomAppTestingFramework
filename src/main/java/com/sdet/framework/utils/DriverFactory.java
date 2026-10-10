@@ -1,4 +1,4 @@
-package com.proton.utils;
+package com.sdet.framework.utils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 

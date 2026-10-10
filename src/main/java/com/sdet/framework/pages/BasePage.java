@@ -1,14 +1,16 @@
-package com.proton.pages;
+package com.sdet.framework.pages;
 
 import com.aventstack.extentreports.Status;
-import com.proton.utils.DriverFactory;
-import com.proton.utils.ExtentManager;
+import com.sdet.framework.utils.DriverFactory;
+import com.sdet.framework.utils.ExtentManager;
 
+import com.sdet.framework.utils.ConfigReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -25,7 +27,7 @@ public class BasePage {
 
         if (this.driver == null) {
             throw new IllegalStateException(
-                    "WebDriver is not initialized. Make sure BaseTest.setUp() runs before creating Page objects."
+                    "WebDriver is not initialized. Make sure @Before hook in Hooks.java runs before creating Page objects."
             );
         }
 
@@ -237,7 +239,7 @@ public class BasePage {
 
         static int getExplicitWait() {
 
-            String value = com.proton.utils.ConfigReader
+            String value = ConfigReader
                     .getProperty("explicitWait");
 
             try {
@@ -252,6 +254,12 @@ public class BasePage {
         int randomNum = (int) (Math.random() * 90000) + 10000;
         return prefix + "_" + randomNum;
     }
-
+    public void selectByVisibleText(By locator, String visibleText) {
+        Select select = new Select(DriverFactory.getDriver().findElement(locator));
+        select.selectByVisibleText(visibleText);
+    }
+    public void pause(int sec) throws InterruptedException {
+        Thread.sleep(sec* 1000L);
+    }
 
 }

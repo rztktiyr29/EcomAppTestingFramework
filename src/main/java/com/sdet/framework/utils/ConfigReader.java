@@ -1,4 +1,4 @@
-package com.proton.utils;
+package com.sdet.framework.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.proton.utils;
+package com.sdet.framework.utils;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -34,7 +34,7 @@ public final class ExtentManager {
                     );
 
             spark.config().setReportName(
-                    "Proton Mail Test Execution Report"
+                    "E Test Execution Report"
             );
 
             spark.config().setDocumentTitle(

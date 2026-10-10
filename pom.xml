@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="
@@ -13,24 +14,43 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-
         <maven.compiler.release>25</maven.compiler.release>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- Existing Dependency Versions -->
         <selenium.version>4.35.0</selenium.version>
-
         <testng.version>7.11.0</testng.version>
-
         <webdrivermanager.version>6.3.3</webdrivermanager.version>
-
         <extentreports.version>5.1.2</extentreports.version>
-
         <log4j.version>2.25.1</log4j.version>
 
+        <!-- New API, DB & BDD Dependency Versions -->
+        <cucumber.version>7.15.0</cucumber.version>
+        <rest-assured.version>5.4.0</rest-assured.version>
+        <jackson.version>2.16.1</jackson.version>
+        <mongodb.version>4.11.1</mongodb.version>
+        <mysql.version>8.3.0</mysql.version>
+        <extent-cucumber-adapter.version>1.14.0</extent-cucumber-adapter.version>
     </properties>
-
+    <!--
+          ====================================================================
+          DEPENDENCY SUMMARY & ARCHITECTURE OVERVIEW:
+          1. Selenium Java (4.35.0)              - Web UI Automation Driver
+          2. TestNG (7.11.0)                     - Test Execution Engine & Assertions
+          3. WebDriverManager (6.3.3)            - Automated Driver Binary Management
+          4. ExtentReports & Cucumber Adapter    - Detailed HTML Test Reporting
+          5. Log4j API & Core (2.25.1)           - Framework Logging Engine
+          6. Commons IO & BouncyCastle           - File Handling & Security Utilities
+          7. Cucumber Java & TestNG (7.15.0)     - BDD Feature & Step Definition Support
+          8. REST Assured (5.4.0)                - Backend REST API Testing Client
+          9. Jackson Databind (2.16.1)           - API JSON Parsing & Serialization
+          10. MongoDB Java Sync Driver (4.11.1)  - Direct MongoDB Atlas Querying
+          11. MySQL Connector (8.3.0)            - Relational Database Querying
+          ====================================================================
+        -->
     <dependencies>
+
+        <!-- ==================== EXISTING DEPENDENCIES ==================== -->
 
         <!-- Selenium -->
         <dependency>
@@ -43,10 +63,9 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
+            <version>7.8.0</version>
+<!--            <scope>test</scope>-->
         </dependency>
-
         <!-- WebDriverManager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -54,7 +73,7 @@
             <version>${webdrivermanager.version}</version>
         </dependency>
 
-        <!-- ExtentReports -->
+        <!-- ExtentReports Base -->
         <dependency>
             <groupId>com.aventstack</groupId>
             <artifactId>extentreports</artifactId>
@@ -95,6 +114,61 @@
             <version>1.78.1</version>
         </dependency>
 
+        <!-- ==================== NEW CUCUMBER BDD DEPENDENCIES ==================== -->
+
+        <!-- Cucumber Java -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+
+        <!-- Cucumber TestNG Integration -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-testng</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+
+        <!-- ExtentReports Cucumber 7 Adapter -->
+        <dependency>
+            <groupId>tech.grasshopper</groupId>
+            <artifactId>extentreports-cucumber7-adapter</artifactId>
+            <version>${extent-cucumber-adapter.version}</version>
+        </dependency>
+
+        <!-- ==================== NEW API TESTING DEPENDENCIES ==================== -->
+
+        <!-- REST Assured -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+
+        <!-- Jackson Databind for API Object Mapping / JSON Parsing -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- ==================== NEW DATABASE DEPENDENCIES ==================== -->
+
+        <!-- MongoDB Sync Driver (For MERN App MongoDB Atlas Assertions) -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>${mongodb.version}</version>
+        </dependency>
+
+        <!-- MySQL JDBC Connector (For Relational DB SQL Assertions) -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -112,7 +186,7 @@
                 </configuration>
             </plugin>
 
-            <!-- TestNG -->
+            <!-- TestNG Surefire Execution -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -125,9 +199,7 @@
                     </suiteXmlFiles>
 
                     <systemPropertyVariables>
-
                         <file.encoding>UTF-8</file.encoding>
-
                     </systemPropertyVariables>
 
                 </configuration>
