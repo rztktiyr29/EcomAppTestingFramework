@@ -1,7 +1,9 @@
-<suite name="SDET BDD Test Suite" parallel="classes" thread-count="2" verbose="1">
-    <test name="E-Commerce BDD Execution">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ECommerce E2E Suite">
+    <test name="E2E Tests">
         <classes>
-            <class name="com.sdet.framework.runners.TestRunner" />
+            <class name="com.sdet.framework.runners.TestRunner"/>
         </classes>
     </test>
 </suite>
