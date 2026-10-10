@@ -8,7 +8,7 @@ Feature: End-to-End E-Commerce Order Lifecycle Automation
     When User enters valid username and password
     Then User should be logged in
 
-  @E2E_Order_001 @Smoke @StripePayment
+  @E2E_Order_001 @Smoke @StripePayment @OrderManagement
   Scenario Outline: Verify End-to-End Order Creation, Stripe Payment, Order History Tracking, and Cart Reset
     And User search product from the "<SheetName>" and "<RowNumber>"
     And User adds product to cart and proceeds to checkout

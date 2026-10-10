@@ -6,9 +6,12 @@ pipeline {
         jdk 'JDK-21'
     }
 
-    triggers {
-        // Runs automatically every weekday at 8:00 AM
-        cron('0 8 * * 1-5')
+    parameters {
+        choice(
+            name: 'CUCUMBER_TAGS',
+            choices: ['@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement'],
+            description: 'Select Cucumber tag to run from UI'
+        )
     }
 
     stages {
@@ -26,17 +29,16 @@ pipeline {
 
         stage('Execute TestNG Suite') {
             steps {
-                bat 'mvn test -DsuiteXmlFile=testng.xml'
+                // Passes selected tag from Jenkins UI to Maven
+                bat "mvn test -DsuiteXmlFile=testng.xml -Dcucumber.filter.tags=\"${params.CUCUMBER_TAGS}\""
             }
         }
     }
 
     post {
         always {
-            // Parses TestNG XML results for trend graphs
             testng defaultSelect: 'fail', testResultsPattern: '**/target/surefire-reports/testng-results.xml'
 
-            // Publishes Extent HTML execution report
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
