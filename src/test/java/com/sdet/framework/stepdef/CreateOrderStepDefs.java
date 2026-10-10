@@ -51,7 +51,7 @@ public class CreateOrderStepDefs extends BasePage {
     }
 
     @And("User completes Stripe payment using card {string}, expiry {string}, cvc {string}")
-    public void userCompletesStripePaymentUsingCardExpiryCvc(String cardNumber, String expiry, String cvc) {
+    public void userCompletesStripePaymentUsingCardExpiryCvc(String cardNumber, String expiry, String cvc) throws InterruptedException {
         // Submit Stripe payment details
         stripePage.completeStripePayment(cardNumber, expiry, cvc, "John Doe");
 

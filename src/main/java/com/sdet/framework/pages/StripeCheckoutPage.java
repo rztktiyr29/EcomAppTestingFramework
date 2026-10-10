@@ -25,16 +25,19 @@ public class StripeCheckoutPage extends BasePage {
     /**
      * Fills Stripe test card details and submits payment.
      */
-    public void completeStripePayment(String cardNumber, String expiryDate, String cvc, String nameOnCard) {
+    public void completeStripePayment(String cardNumber, String expiryDate, String cvc, String nameOnCard) throws InterruptedException {
         sendKeys(emailInput, "abc@xyz.com");
+        pause(1);
         sendKeys(cardNumberInput, cardNumber);
+        pause(1);
         sendKeys(cardExpiryInput, expiryDate);
+        pause(1);
         sendKeys(cardCvcInput, cvc);
-
+        pause(1);
         if (isDisplayed(billingNameInput)) {
             sendKeys(billingNameInput, nameOnCard);
         }
-
+        pause(1);
         click(payButton);
     }
 }
