@@ -36,9 +36,10 @@ pipeline {
 
     post {
         always {
-            // Corrected parameter names for the TestNG plugin
+            // 1. TestNG XML Processing
             testNG showFailedBuilds: true, reportFilenamePattern: '**/target/surefire-reports/testng-results.xml'
 
+            // 2. Extent HTML Report Publishing
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -46,6 +47,16 @@ pipeline {
                 reportDir: 'test-output',
                 reportFiles: 'index.html',
                 reportName: 'Extent Test Report'
+            ])
+
+            // 3. Native Cucumber HTML Report Publishing
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target/cucumber-reports',
+                reportFiles: 'cucumber-pretty.html',
+                reportName: 'Cucumber HTML Report'
             ])
         }
     }
