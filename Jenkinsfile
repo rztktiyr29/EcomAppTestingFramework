@@ -35,18 +35,18 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            testng defaultSelect: 'fail', testResultsPattern: '**/target/surefire-reports/testng-results.xml'
+   post {
+           always {
+   
+               testNG showFailedBuild: true, testResultsPattern: '**/target/surefire-reports/testng-results.xml'
 
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'test-output',
-                reportFiles: 'index.html',
-                reportName: 'Extent Test Report'
-            ])
-        }
-    }
-}
+               publishHTML(target: [
+                   allowMissing: true,
+                   alwaysLinkToLastBuild: true,
+                   keepAll: true,
+                   reportDir: 'test-output',
+                   reportFiles: 'index.html',
+                   reportName: 'Extent Test Report'
+               ])
+           }
+       }
