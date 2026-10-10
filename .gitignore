@@ -46,6 +46,3 @@ build/
 logs/
 reports/
 target/
-
-# Ignore sensitive local config
-src/test/resources/config.properties
