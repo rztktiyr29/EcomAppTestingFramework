@@ -29,24 +29,26 @@ pipeline {
 
         stage('Execute TestNG Suite') {
             steps {
-                // Passes selected tag from Jenkins UI to Maven
+                // Passes selected tag from Jenkins UI to Maven execution
                 bat "mvn test -DsuiteXmlFile=testng.xml -Dcucumber.filter.tags=\"${params.CUCUMBER_TAGS}\""
             }
         }
     }
 
-   post {
-           always {
-   
-               testNG showFailedBuild: true, testResultsPattern: '**/target/surefire-reports/testng-results.xml'
+    post {
+        always {
+            // Parses TestNG XML results for trends
+            testNG showFailedBuild: true, testResultsPattern: '**/target/surefire-reports/testng-results.xml'
 
-               publishHTML(target: [
-                   allowMissing: true,
-                   alwaysLinkToLastBuild: true,
-                   keepAll: true,
-                   reportDir: 'test-output',
-                   reportFiles: 'index.html',
-                   reportName: 'Extent Test Report'
-               ])
-           }
-       }
+            // Publishes Extent HTML execution report
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'test-output',
+                reportFiles: 'index.html',
+                reportName: 'Extent Test Report'
+            ])
+        }
+    }
+}
