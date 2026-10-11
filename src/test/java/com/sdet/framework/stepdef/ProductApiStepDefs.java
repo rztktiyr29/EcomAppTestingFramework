@@ -67,7 +67,6 @@ public class ProductApiStepDefs {
         payload.setPrice(selectedPrice);
         payload.setCategory("Phone");
         payload.setQty(12);
-//        payload.setRam("2gb");
         payload.setImgSrc("https://www.apple.com/newsroom/images/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/article/Apple-iPhone-16-Pro-hero-geo-240909_inline.jpg.large.jpg");
 
         // Execute authenticated PUT request
@@ -93,12 +92,9 @@ public class ProductApiStepDefs {
         // 1. Retrieve the expected price stored during the API update step
         double expectedPrice = TestContext.getExpectedPrice();
         System.out.println("Expected Price: "+expectedPrice);
-        // 2. Locate the price element on the web page using XPath
 
-
-        // 3. Clean up the text (remove '$' symbol and trim whitespace)
         CreateOrderE2E ce = new CreateOrderE2E();
-        String uiText = ce.getPrice();
+        String uiText = ce.getProductPrice();
         double actualUiPrice = Double.parseDouble(uiText);
         System.out.println("Actual Price: "+ actualUiPrice);
         // 4. Assert that the UI price matches the updated API price exactly
