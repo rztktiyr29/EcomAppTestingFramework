@@ -89,6 +89,9 @@ public class CreateOrderE2E extends BasePage {
             By.xpath("//p[normalize-space()='Cart is empty']");
     private final By continueShoppingBtn =
             By.xpath("//button[normalize-space()='Continue shopping....']");
+    WebElement priceElement = DriverFactory.getDriver().findElement(
+            By.xpath("//h2[contains(@class, 'text-3xl font-bold')]")
+    );
     public CreateOrderE2E() {
         super();
     }
@@ -334,5 +337,10 @@ public class CreateOrderE2E extends BasePage {
 
         Assert.assertTrue(isDisplayed(continueShoppingBtn),
                 "'Continue shopping....' button is not displayed on the empty cart page!");
+    }
+    public String getPrice() throws InterruptedException {
+        pause(2);
+       return  priceElement.getText().replace("$", "").trim();
+
     }
 }

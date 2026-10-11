@@ -1,4 +1,4 @@
-
+@ui
 Feature: User Login Functionality
   As a registered user
   I want to log in with my credentials

@@ -1,4 +1,4 @@
-@E2E @OrderManagement @Regression @P1
+@E2E @OrderManagement @Regression @P1 @ui
 Feature: End-to-End E-Commerce Order Lifecycle Automation
   As a registered user of the Ecommerce application
   I want to search for products, manage cart items, complete checkout with shipping details, and process Stripe payment
