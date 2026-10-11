@@ -3,6 +3,7 @@ package com.sdet.framework.stepdef;
 import com.sdet.framework.api.clients.ProductApiClient;
 import com.sdet.framework.api.clients.UserApiClient;
 import com.sdet.framework.api.pojo.ProductPojo;
+import com.sdet.framework.pages.BasePage;
 import com.sdet.framework.pages.CreateOrderE2E;
 import com.sdet.framework.utils.ConfigReader;
 import com.sdet.framework.utils.DriverFactory;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 import static com.sdet.framework.utils.DriverFactory.getDriver;
 
-public class ProductApiStepDefs {
+public class ProductApiStepDefs extends BasePage{
 
     private final UserApiClient userApiClient = new UserApiClient();
     private final ProductApiClient productApiClient = new ProductApiClient();
@@ -94,7 +95,9 @@ public class ProductApiStepDefs {
         System.out.println("Expected Price: "+expectedPrice);
 
         CreateOrderE2E ce = new CreateOrderE2E();
+        pause(2);
         String uiText = ce.getProductPrice();
+        pause(1);
         double actualUiPrice = Double.parseDouble(uiText);
         System.out.println("Actual Price: "+ actualUiPrice);
         // 4. Assert that the UI price matches the updated API price exactly
