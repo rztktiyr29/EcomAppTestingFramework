@@ -15,7 +15,6 @@ pipeline {
     }
 
     environment {
-        // Updated credential IDs to match standard names cleanly
         MONGO_URI = credentials('jenkins-mongo-uri')
         ADMIN_EMAIL = credentials('jenkins-admin-email')
         ADMIN_PASSWORD = credentials('jenkins-admin-password')
@@ -43,31 +42,28 @@ pipeline {
 
     post {
         always {
-            // Wrap reporting steps inside a node block so Jenkins has a workspace context
-            node {
-                // TestNG XML Processing
-                testNG showFailedBuilds: true, reportFilenamePattern: '**/target/surefire-reports/testng-results.xml'
+            // TestNG XML Processing
+            testNG showFailedBuilds: true, reportFilenamePattern: '**/target/surefire-reports/testng-results.xml'
 
-                // Extent HTML Report Publishing
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'test-output',
-                    reportFiles: 'ExtentReport.html',
-                    reportName: 'Extent Test Report'
-                ])
+            // Extent HTML Report Publishing
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'test-output',
+                reportFiles: 'ExtentReport.html',
+                reportName: 'Extent Test Report'
+            ])
 
-                // Native Cucumber HTML Report Publishing
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'target/cucumber-reports',
-                    reportFiles: 'cucumber-pretty.html',
-                    reportName: 'Cucumber HTML Report'
-                ])
-            }
+            // Native Cucumber HTML Report Publishing
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target/cucumber-reports',
+                reportFiles: 'cucumber-pretty.html',
+                reportName: 'Cucumber HTML Report'
+            ])
         }
     }
 }
