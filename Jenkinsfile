@@ -6,13 +6,20 @@ pipeline {
         jdk 'JDK-21'
     }
 
-   parameters {
-           choice(
-               name: 'CUCUMBER_TAGS',
-               choices: ['@UI_API', '@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement'],
-               description: 'Select Cucumber tag to run from UI'
-           )
-       }
+    parameters {
+        choice(
+            name: 'CUCUMBER_TAGS',
+            choices: ['@UI_API', '@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement'],
+            description: 'Select Cucumber tag to run from UI'
+        )
+    }
+
+    environment {
+        // Pulling encrypted secrets from Jenkins Credentials manager
+        MONGO_URI = credentials('jenkins-mongo-uri')
+        ADMIN_EMAIL = credentials('jenkins-admin-email')
+        ADMIN_PASSWORD = credentials('jenkins-admin-password')
+    }
 
     stages {
         stage('Checkout Code') {
@@ -29,17 +36,18 @@ pipeline {
 
         stage('Execute TestNG Suite') {
             steps {
-                bat "mvn test -DsuiteXmlFile=testng.xml -Dcucumber.filter.tags=\"${params.CUCUMBER_TAGS}\""
+                // Passing environment secrets into Maven system properties (-D)
+                bat "mvn test -DsuiteXmlFile=testng.xml -Dcucumber.filter.tags=\"${params.CUCUMBER_TAGS}\" -Dmongo.uri=\"${MONGO_URI}\" -Dadmin.email=\"${ADMIN_EMAIL}\" -Dadmin.password=\"${ADMIN_PASSWORD}\""
             }
         }
     }
 
     post {
         always {
-            // 1. TestNG XML Processing
+            // TestNG XML Processing
             testNG showFailedBuilds: true, reportFilenamePattern: '**/target/surefire-reports/testng-results.xml'
 
-            // 2. Extent HTML Report Publishing
+            // Extent HTML Report Publishing
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -49,7 +57,7 @@ pipeline {
                 reportName: 'Extent Test Report'
             ])
 
-            // 3. Native Cucumber HTML Report Publishing
+            // Native Cucumber HTML Report Publishing
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,

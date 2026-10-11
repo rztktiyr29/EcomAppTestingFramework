@@ -1,0 +1,10 @@
+baseUrl=https://mern-ecommerce-front-end.vercel.app/
+browser=chrome
+headless=true
+base.url=https://mern-ecommerce-api-9e9r.onrender.com
+admin.email=your_email@gmail.com
+admin.password=your_password
+implicitWait=0
+explicitWait=20
+mongo.uri=YOUR_MONGODB_CONNECTION_STRING
+mongo.db.name=MERN_E_Commerce

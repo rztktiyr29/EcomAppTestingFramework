@@ -46,3 +46,6 @@ build/
 logs/
 reports/
 target/
+
+# Ignore local sensitive configuration file
+src/test/resources/config.properties
