@@ -3,6 +3,7 @@ Feature: End-to-End E-commerce Product Update and Checkout Verification
   Scenario Outline: Admin updates product via API and user validates price on UI
     Given admin logs in with admin credentials
     When admin updates product "<productId>" with a random price from allowed list: "<allowedPrices>"
+    And the product price in MongoDB is updated to match the API update for "<productId>"
     When User enters valid username and password
     Then User should be logged in
     And user navigates to product details page for "<productId>"
