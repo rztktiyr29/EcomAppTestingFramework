@@ -9,7 +9,7 @@ pipeline {
     parameters {
         choice(
             name: 'CUCUMBER_TAGS',
-            choices: ['@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement'],
+            choices: ['@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement','@UI_API'],
             description: 'Select Cucumber tag to run from UI'
         )
     }
