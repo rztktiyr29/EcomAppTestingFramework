@@ -6,13 +6,13 @@ pipeline {
         jdk 'JDK-21'
     }
 
-    parameters {
-        choice(
-            name: 'CUCUMBER_TAGS',
-            choices: ['@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement','@UI_API'],
-            description: 'Select Cucumber tag to run from UI'
-        )
-    }
+   parameters {
+           choice(
+               name: 'CUCUMBER_TAGS',
+               choices: ['@UI_API', '@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement'],
+               description: 'Select Cucumber tag to run from UI'
+           )
+       }
 
     stages {
         stage('Checkout Code') {
