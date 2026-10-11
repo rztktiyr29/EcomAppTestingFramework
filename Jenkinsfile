@@ -9,15 +9,8 @@ pipeline {
     parameters {
         choice(
             name: 'CUCUMBER_TAGS',
-            choices: [
-                '@UI_API',
-                '@login',
-                '@Smoke',
-                '@Regression',
-                '@E2E',
-                '@OrderManagement'
-            ],
-            description: 'Select the Cucumber tag to execute'
+            choices: ['@UI_API', '@login', '@Smoke', '@Regression', '@E2E', '@OrderManagement'],
+            description: 'Select Cucumber tag to run from UI'
         )
     }
 
@@ -30,57 +23,45 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/rztktiyr29/EcomAppTestingFramework.git'
+                git branch: 'main', url: 'https://github.com/rztktiyr29/EcomAppTestingFramework.git'
+            }
+        }
+
+        stage('Compile Framework') {
+            steps {
+                bat 'mvn clean test-compile'
             }
         }
 
         stage('Build and Execute Tests') {
             steps {
-                bat '''
-                    mvn clean test ^
-                    -DsuiteXmlFile=testng.xml ^
-                    -Dcucumber.filter.tags="%CUCUMBER_TAGS%" ^
-                    -Dmongo.uri="%MONGO_URI%" ^
-                    -Dadmin.email="%ADMIN_EMAIL%" ^
-                    -Dadmin.password="%ADMIN_PASSWORD%"
-                '''
+                bat "mvn test -DsuiteXmlFile=testng.xml -Dcucumber.filter.tags=\"${params.CUCUMBER_TAGS}\" -Dmongo.uri=\"${MONGO_URI}\" -Dadmin.email=\"${ADMIN_EMAIL}\" -Dadmin.password=\"${ADMIN_PASSWORD}\""
             }
+        }
+    }
 
-            post {
-                always {
-                    script {
-                        echo 'Publishing test reports...'
+    post {
+        always {
+            script {
+                // Extent HTML Report Publishing
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'test-output',
+                    reportFiles: 'ExtentReport.html',
+                    reportName: 'Extent Test Report'
+                ])
 
-                        if (fileExists('target/surefire-reports/testng-results.xml')) {
-                            step([
-                                $class: 'TestNGPublisher',
-                                reportFilenamePattern: '**/testng-results.xml',
-                                showFailedBuilds: true
-                            ])
-                        } else {
-                            echo 'TestNG XML report not found.'
-                        }
-                    }
-
-                    publishHTML(target: [
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'test-output',
-                        reportFiles: 'ExtentReport.html',
-                        reportName: 'Extent Test Report'
-                    ])
-
-                    publishHTML(target: [
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'target/cucumber-reports',
-                        reportFiles: 'cucumber-pretty.html',
-                        reportName: 'Cucumber HTML Report'
-                    ])
-                }
+                // Native Cucumber HTML Report Publishing
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'target/cucumber-reports',
+                    reportFiles: 'cucumber-pretty.html',
+                    reportName: 'Cucumber HTML Report'
+                ])
             }
         }
     }
