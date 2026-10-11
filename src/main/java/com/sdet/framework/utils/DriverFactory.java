@@ -11,6 +11,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class DriverFactory {
 
@@ -34,7 +36,6 @@ public final class DriverFactory {
                 Boolean.parseBoolean(
                         ConfigReader.getProperty(
                                 "headless"
-
                         )
                 );
 
@@ -44,17 +45,34 @@ public final class DriverFactory {
 
                 WebDriverManager.chromedriver().setup();
 
-                ChromeOptions chromeOptions =
-                        new ChromeOptions();
+                ChromeOptions chromeOptions = new ChromeOptions();
 
+                // 1. Set experimental preferences to block save bubbles & autofill popups
+                Map<String, Object> chromePrefs = new HashMap<>();
+                chromePrefs.put("credentials_enable_service", false);
+                chromePrefs.put("profile.password_manager_enabled", false);
+                chromePrefs.put("autofill.profile_enabled", false);
+                chromePrefs.put("autofill.credit_card_enabled", false);
+                chromePrefs.put("profile.default_content_setting_values.notifications", 2);
+                chromePrefs.put("profile.default_content_setting_values.geolocation", 2);
+
+                chromeOptions.setExperimentalOption("prefs", chromePrefs);
+
+                // 2. Add browser arguments to suppress UI overlays & ensure container stability
                 if (headless) {
                     chromeOptions.addArguments("--headless=new");
+                    chromeOptions.addArguments("--window-size=1920,1080");
                 }
 
                 chromeOptions.addArguments(
                         "--start-maximized",
                         "--disable-notifications",
-                        "--disable-popup-blocking"
+                        "--disable-popup-blocking",
+                        "--disable-save-password-bubble",
+                        "--disable-autofill",
+                        "--disable-infobars",
+                        "--no-sandbox",
+                        "--disable-dev-shm-usage"
                 );
 
                 driver.set(
@@ -67,12 +85,15 @@ public final class DriverFactory {
 
                 WebDriverManager.firefoxdriver().setup();
 
-                FirefoxOptions firefoxOptions =
-                        new FirefoxOptions();
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
 
                 if (headless) {
                     firefoxOptions.addArguments("-headless");
                 }
+
+                // Suppress password saving prompt in Firefox
+                firefoxOptions.addPreference("signon.rememberSignons", false);
+                firefoxOptions.addPreference("dom.webnotifications.enabled", false);
 
                 driver.set(
                         new FirefoxDriver(firefoxOptions)
@@ -84,8 +105,15 @@ public final class DriverFactory {
 
                 WebDriverManager.edgedriver().setup();
 
-                EdgeOptions edgeOptions =
-                        new EdgeOptions();
+                EdgeOptions edgeOptions = new EdgeOptions();
+
+                Map<String, Object> edgePrefs = new HashMap<>();
+                edgePrefs.put("credentials_enable_service", false);
+                edgePrefs.put("profile.password_manager_enabled", false);
+                edgePrefs.put("autofill.profile_enabled", false);
+                edgePrefs.put("autofill.credit_card_enabled", false);
+
+                edgeOptions.setExperimentalOption("prefs", edgePrefs);
 
                 if (headless) {
                     edgeOptions.addArguments("--headless=new");
@@ -93,7 +121,10 @@ public final class DriverFactory {
 
                 edgeOptions.addArguments(
                         "--start-maximized",
-                        "--disable-notifications"
+                        "--disable-notifications",
+                        "--disable-popup-blocking",
+                        "--disable-save-password-bubble",
+                        "--disable-autofill"
                 );
 
                 driver.set(

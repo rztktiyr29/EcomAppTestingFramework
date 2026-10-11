@@ -1,6 +1,8 @@
 package com.sdet.framework.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 public class StripeCheckoutPage extends BasePage {
 
@@ -26,18 +28,28 @@ public class StripeCheckoutPage extends BasePage {
      * Fills Stripe test card details and submits payment.
      */
     public void completeStripePayment(String cardNumber, String expiryDate, String cvc, String nameOnCard) throws InterruptedException {
+
+        // 1. Fill email first so Stripe initializes the card payment container
         sendKeys(emailInput, "abc@xyz.com");
-        pause(1);
+        pause(2);
+
+        // 2. Fill card details in proper sequence
         sendKeys(cardNumberInput, cardNumber);
-        pause(1);
         sendKeys(cardExpiryInput, expiryDate);
-        pause(1);
         sendKeys(cardCvcInput, cvc);
-        pause(1);
+
+        // 3. Handle optional billing name field using WebElement lookup (not casting By)
         if (isDisplayed(billingNameInput)) {
-            sendKeys(billingNameInput, nameOnCard);
+            WebElement nameElement = waitForElementToBeVisible(billingNameInput);
+            Actions action = new Actions(driver);
+            action.moveToElement(nameElement)
+                    .click()
+                    .sendKeys(nameOnCard)
+                    .build()
+                    .perform();
         }
-        pause(1);
+
+        // 4. Submit payment
         click(payButton);
     }
 }

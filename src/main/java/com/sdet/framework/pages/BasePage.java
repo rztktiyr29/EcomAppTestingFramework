@@ -80,8 +80,7 @@ public class BasePage {
         }
     }
 
-    protected void sendKeys(By locator, String text) {
-
+    public void sendKeys(By locator, String value) {
         log.info("Typing into element: {}", locator);
 
         if (ExtentManager.getTest() != null) {
@@ -90,18 +89,22 @@ public class BasePage {
                     "Typing into element: " + locator
             );
         }
-
         WebElement element = waitForElementToBeVisible(locator);
 
-        element.click();
+        // 1. Scroll element into the center of the viewport
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element);
+
+        try {
+            // 2. Attempt standard click with a short pause
+            element.click();
+        } catch (ElementClickInterceptedException e) {
+            // 3. Fallback to JavaScript click if an overlay/iframe border intercepts coordinates
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        }
 
         element.clear();
-
-        if (text != null) {
-            element.sendKeys(text);
-        }
+        element.sendKeys(value);
     }
-
     protected String getText(By locator) {
 
         log.info("Fetching text from: {}", locator);
